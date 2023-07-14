@@ -121,4 +121,45 @@ router.delete("/questions/:id", async (req, res) => {
   }
 });
 
+router.post("/testcases/:id", async (req, res) => {
+  const { id } = req.params;
+  const { input,output,judgeId,timeLimit} = req.body;
+
+  try {
+
+    const requestData = {
+      id,
+      input,
+      output,
+      judgeId,
+      timeLimit
+    };
+    const question = await Question.findOne({ sphereEngineId: id });
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    // Make the request to the Sphere Engine API to delete the question
+    const responseData = await fetch(
+      `https://0f1b9d22.problems.sphere-engine.com/api/v4/problems/${id}/testcases?access_token=b7e65d1e26418e6072b81c63a06ef356`,
+      {
+        method: "POST",
+        body: JSON.stringify(requestData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log(await responseData.json());
+
+  
+
+    res.json({ message: `Test Cases added to Question : ${id}` });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
