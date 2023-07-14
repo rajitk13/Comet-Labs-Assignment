@@ -39,7 +39,7 @@ router.post("/questions", async (req, res) => {
 
     // console.log(await responseData.json());
 
-    res.status(200).json({ message: "Success & Saved" });
+    res.status(200).json({ message: `Success & Saved , SphereId: ${sphereEngineId}` });
   } catch (error) {
     // res.status(500).json({ message: "Internal server error" });
     res.json(error);
